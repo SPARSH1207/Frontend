@@ -1,0 +1,140 @@
+  <!DOCTYPE html>
+<html>
+<head>
+    <title>Phone Directory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .layout-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .justify-content-center {
+            justify-content: center;
+        }
+        
+        .mt-75 {
+            margin-top: 75px;
+        }
+        
+        .mx-auto {
+            margin: 0 auto;
+        }
+        
+        .mt-30 {
+            margin-top: 30px;
+        }
+        
+        .w-75 {
+            width: 75%;
+        }
+        
+        .contacts-card {
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        
+        .ml-30 {
+            margin-left: 30px;
+        }
+        
+        #summaryTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        #summaryTable th,
+        #summaryTable td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .error {
+            display: none;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout-column justify-content-center mt-75">
+        <div class="mx-auto">
+            <input type="text" id="name" data-testid="name" value="" placeholder="Contact Name" required/>
+            <input type="text" id="mobile" data-testid="mobile" value="" placeholder="Mobile Number" required/>
+            <input type="email" id="email" data-testid="email" value="" placeholder="Email" />
+            <button type="button" id="submit" data-testid="submit" class="small" onclick="handleSubmit(event)">
+        Add Contact
+      </button>
+            <div id="error" data-testid="error" class="error text-center error alert mx-75 mt-30">
+                Invalid Input!
+            </div>
+        </div>
+        <div class="card mx-auto mt-30 w-75 contacts-card">
+            <h4 class="ml-30" id="contactsSummary">Contacts Summary</h4>
+            <div id="contactSummary" class="contactSummary">
+                <table id="summaryTable" data-testid="summaryTable">
+                    <thead>
+                        <tr>
+                            <th id="nameColumn">Name</th>
+                            <th id="mobileColumn">Mobile</th>
+                            <th id="emailColumn">Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Contact rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var nameInput = document.getElementById('name');
+        var mobileInput = document.getElementById('mobile');    
+        var emailInput = document.getElementById('email');
+        var submitButton = document.getElementById('submit');
+        var errorDiv = document.getElementById('error');
+        var nameInputRegex = /^[a-zA-Z ]{1,20}$/;
+        var mobileInputRegex = /^[0-9]{10}$/; // Assuming 10-digit mobile numbers
+        var emailInputRegex = /^[a-zA-Z][a-zA-Z0-9.]{1,9}@[a-zA-z.]{2,10}$/
+        var isErrorPresent = false;
+        var handleSubmit = (e) => {
+             if(!nameInput.value || !mobileInput.value || !emailInput.value) {
+                errorDiv.style.display = 'block';
+                return;
+        }
+        if(!nameInputRegex.test(nameInput.value) || !mobileInputRegex.test(mobileInput.value) || !emailInputRegex.test(emailInput.value)) {
+            errorDiv.style.display = 'block';
+            return;
+        }
+        errorDiv.style.display = 'none';
+        addContactToSummary(nameInput.value, mobileInput.value, emailInput.value);
+         emailInput.value = '';
+        nameInput.value = '';
+        mobileInput.value = '';
+        };
+        var addContactToSummary = (name, mobile, email) => {
+           var summaryTable = document.getElementById('summaryTable');
+           var tbody = summaryTable.querySelector('tbody');;
+              var newRow = tbody.insertRow();  
+            var nameCell = newRow.insertCell(0);
+            var mobileCell = newRow.insertCell(1);  
+            var emailCell = newRow.insertCell(2);
+            nameCell.textContent = name;
+            mobileCell.textContent = mobile;
+            emailCell.textContent = email;
+
+        };
+
+    </script>
+</body>
+
+</html>
